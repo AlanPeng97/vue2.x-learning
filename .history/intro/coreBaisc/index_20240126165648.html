@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Vue2官方文档介绍章节： Vue核心最基本的功能 -->
+    <title>Vue2 CoreBaisc</title>
+    <!-- CDN引入Vue2 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+    <!-- 💁‍♂️ 1. 在生产环境可以把vue.js 换成 vue.min.js ， 这是一个更小的构建，获得比开发环境更快的速度体验
+          2. 构建大型应用时使用NPM安装Vue，因为NPM能更好地配合webpack等打包器，同时Vue也能提供配套工具来开发单文件组件
+          3. Vue提供CLI（Vue Cli），为单页面应用（SPA）快速搭建脚手架，详细参考官方文档
+    -->
+  </head>
+  <body>
+    <!--  1. vue.js核心： 简洁的模版语法，声明式地将数据渲染进DOM -->
+    <div id="app">{{message}}</div>
+
+    <!-- 2. v-bind（缩写为 : ） attribute（属性） 用于绑定元素属性 -->
+    <div id="app-2">
+      <span v-bind:title="message"
+        >鼠标悬停几秒钟查看此处动态绑定的提示信息！</span
+      >
+    </div>
+
+    <!-- 3. 条件与循环 数据绑定到DOM v-if v-for -->
+    <div id="app-3">
+      <p v-if="seen">now, you can see me</p>
+    </div>
+
+    <div id="app-4">
+      <ol>
+        <li v-for="todo in todos">{{ todo.text }}</li>
+      </ol>
+    </div>
+
+    <!-- 处理用户输入 v-on指令添加 事件监听 ，调用Vue实例定义的方法 -->
+    <div id="app-5">
+      <p>{{message}}</p>
+      <button v-on:click="reverseMessage">反转消息</button>
+    </div>
+
+    <script type="text/javascript">
+      var app = new Vue({
+        el: "#app",
+        data: {
+          message: "Hello Vue!", // 声明message
+        },
+      });
+
+      var app2 = new Vue({
+        el: "#app-2",
+        data: {
+          message: "页面加载于" + new Date().toLocaleString(),
+        },
+      });
+
+      var app3 = new Vue({
+        el: "#app-3",
+        data: {
+          seen: true,
+        },
+      });
+
+      var app4 = new Vue({
+        el: "#app-4",
+        data: {
+          todos: [
+            { text: "学习 JavaScript" },
+            { text: "学习 Vue" },
+            { text: "整个牛项目" },
+          ],
+        },
+      });
+
+      var app5 = new Vue({
+        el: "#app-5",
+        data: {
+          message: "Hello Vue.js!",
+        },
+        methods: {
+          reverseMessage: function () {
+            this.message = this.message.split("").reverse().jion("");
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

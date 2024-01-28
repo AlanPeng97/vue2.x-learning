@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DataAndMethod</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      // 数据对象
+      var data = { a: 1 };
+
+      // 数据对象被加入到Vue实例中
+      var vm = new Vue({
+        data: data,
+      });
+
+      // 实例上的property返回源数据对应的字段
+      console.log(vm.a == data.a); // true
+
+      // 修改实例上的property,会影响原始数据,反之亦然
+      vm.a = 2;
+      console.log(data.a);
+
+      data.a = 3;
+      console.log(vm.a);
+
+      // 实例被创建时已存在于data中的property才是响应式的, 如果添加一个新的property, 将不会触发任何视图更新
+      vm.b = "hi";
+
+      // 如果后续需要用到一些property, 则一开始设置一些初始值, 为空或者不存在.
+      data: {
+        a: "",
+        b: [],
+      }
+    </script>
+  </body>
+</html>

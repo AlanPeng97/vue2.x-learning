@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>computed</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+  </head>
+  <body>
+    <!-- 模版内的表达式非常便利，但是只适用于简单运算，如果在模版内放入太多逻辑会让模版过重且难以维护，对于复杂逻辑，应当使用计算属性 -->
+    <div id="example">
+      <!-- {{example.split("").reverse().join("")}} 如果模版过多这样的表达式会难以维护 -->
+      <p>Original message: "{{message}}"</p>
+      <p>Computed reversed message: "{{ reversedMessage }}"</p>
+
+      <!-- 计算属性缓存 vs 方法 -- 在表达式中调用方法来达到同样效果
+           不同的是： 计算属性是基于它们的响应式依赖进行缓存的，只有相关响应依赖发生改变时它们才会重新请求值
+           假设有一个性能开销比较大的计算属性A，它需要遍历一个巨大数组并做大量计算。如果有其他计算属性依赖于A，如果没有缓存，不可避免的多次执行A地getter。如果不希望缓存则用方法代替
+       -->
+      <p>Computed reversed message: "{{ reversedMessageMethod() }}"</p>
+
+      <!-- 侦听属性 是一种更通用的方式来观察和响应Vue实例上的数据变动。有时候使用计算属性是更好的做法 -->
+      <div>{{fullName}}</div>
+      <div>{{fullNames}}</div>
+    </div>
+    <script>
+      var vm = new Vue({
+        el: "#example",
+        data: {
+          message: "Hello",
+          firstName: "Foo",
+          lastName: "Bar",
+          // fullName: "Foo Bar",
+        },
+        methods: {
+          reversedMessageMethod: function () {
+            return this.message.split("").reverse().join("");
+          },
+        },
+        watch: {
+          firstName: function (val) {
+            // this.fullName = val + " " + this.lastName;
+          },
+          lastName: function (val) {
+            // this.fullName = this.firstName + " " + val;
+          },
+        },
+        computed: {
+          // 计算属性的getter
+          // vm.reversedMessage的值始终取决于vm.message的值，当message的值改变了，reversedMessage的值也会改变
+          reversedMessage: function () {
+            // this 指向 vm 实例
+            return this.message.split("").reverse().join("");
+          },
+
+          // 对比上面使用watch，计算属性版本更好
+          fullName: function () {
+            return this.firstName + " " + this.lastName;
+          },
+          fullNames: {
+            // getter
+            get: function () {
+              return this.firstName + " " + this.lastName;
+            },
+
+            // setter
+            set: function (newVal) {
+              var names = newVal.split(" ");
+              this.firstName = names[0];
+              this.lastName = names[names.length - 1];
+            },
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

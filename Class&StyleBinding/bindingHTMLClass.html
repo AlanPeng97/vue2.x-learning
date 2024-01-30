@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>bindingHTMLClass</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <!-- v-bind 可以用于 class 和 style 除了表达式结果的类型是字符串之外，还可以是对象和数组 -->
+      <!-- 对象语法start -->
+      <!-- 下面的语法表示 active 这个class存在与否取决于 property isActive 的 真值 -->
+      <div v-bind:class="{active: isActive}"></div>
+
+      <!-- 可以在对象中传入更多自断来动态切换多个class， v-bind:class 也可以与普通的class attribute共存
+           下面的例子： isActive 和 hasError变化时， class列表将相应地更新
+       -->
+      <div
+        class="static"
+        v-bind:class="{ active: isActive, 'text-danger': hasError }"
+      ></div>
+
+      <!-- 绑定的数据对象不必內联定义在模版里，也可以是计算属性 -->
+      <div v-bind:class="classObject"></div>
+      <div v-bind:class="computedClassObject"></div>
+      <!-- 对象语法end -->
+
+      <!-- 数组语法start -->
+      <!-- 可以把数组传给v-bind:class -->
+      <div v-bind:class="[activeClass, errorClass]"></div>
+      <!-- 根据条件切换列表中的class，也可以用三元表达式 -->
+      <div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
+      <!-- 当有多个条件 class 时这样写有些繁琐。所以在数组语法中也可以使用对象语法 -->
+      <div v-bind:class="[{ active: isActive }, errorClass]"></div>
+      <!-- 数组语法end -->
+
+      <!-- 使用在组件上 -->
+      <my-component v-bind:class="{ active: isActive }"></my-component>
+    </div>
+
+    <script>
+      Vue.component("my-component", {
+        template: '<p class="foo bar">Hi</p>',
+      });
+      var vm = new Vue({
+        el: "#app",
+        data: {
+          isActive: true,
+          hasError: false,
+          error: null,
+          classObject: {
+            active: true,
+            "text-danger": false,
+          },
+
+          activeClass: "active",
+          errorClass: "text-danger",
+        },
+        computed: {
+          computedClassObject: function () {
+            return {
+              active: this.isActive && !this.error,
+              "text-danger": this.error && this.error.type === "fatal",
+            };
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

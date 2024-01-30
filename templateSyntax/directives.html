@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>directives</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
+  </head>
+  <body>
+    <!-- 指令是带有 v- 前缀的特殊attribute。 指令的值预期是单个JavaScript表达式（v-for是个例外）。指令的职责是在表达式的值发生改变的时候，将其产生的连带影响，响应式地作用于DOM。 -->
+    <div id="app">
+      <p v-if="seen">现在你看到我了</p>
+      <!-- # 参数： 一些指令可以接收一个“参数”， 在指令名称（v-bind）之后以冒号表示 v-bind缩写 :，例如，v-bind可以响应式地更新HTML attribute
+                   下面例子 href attribute 与 表达式 url 的值绑定
+       -->
+      <a v-bind:href="url">baidu</a>
+      <!-- v-on 指令，用于监听DOM事件 -->
+      <a v-on:click="doSomething">on</a>
+      <!-- # 动态参数 方括号括起来的JavaScript表达式作为指令的参数
+             动态参数值为null 能够显性地移除绑定，任何其他非字符串的值都会触发一个警告⚠️
+
+             动态参数表达式参数的约束： 空格和引号在HTML attribute名里是无效的， 例如 ‘foo’ + bar -- <a v-bind:[someAttr]="value"> ... </a>，变通方法是使用没有空格或者引号的表达式，或则使用计算属性代替，
+             动态参数键名要避免使用大写来命名 -- <a v-bind:[someAttr]="value"> ... </a>，因为浏览器会把attribute名全部转为小写
+       -->
+      <a v-bind:[attriname]="url">动态参数href</a>
+      <a v-on:[eventname]="doSomething">v-on：[动态参数]</a>
+      <a v-on:[null]="doSomething">v-on：[null]</a>
+
+      <!-- # 修饰符 以半角句号 . 指明特殊后缀，用于指出一个指令以特殊的方式绑定。
+             如，.prevent 修饰符告诉 v-on 指令（缩写@）对于触发的事件调用 event.preventDefault()：
+       -->
+      <form v-on:submit.prevent="onSubmit"></form>
+    </div>
+    <script>
+      let vm = new Vue({
+        el: "#app",
+        data: function () {
+          return {
+            seen: true,
+            url: "https://www.baidu.com",
+            attriname: "href",
+            eventname: "click",
+          };
+        },
+        methods: {
+          doSomething: function () {
+            alert("doSomething");
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

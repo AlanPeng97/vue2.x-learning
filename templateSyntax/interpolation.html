@@ -6,5 +6,45 @@
     <title>插值</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
   </head>
-  <body></body>
+  <body>
+    <div id="app">
+      <!-- 1️⃣  文本 ：常见使用形式 “Mustache”语法（双大括号），Mustache标签将会被代替为对应数据对象上对应的值(解释为普通文本)，并且会响应式地改变
+                一次性地插值 v-once 当数据改变时，插值处的数据不会更新
+     -->
+      <span>Message: {{ msg }}</span>
+      <span v-once>这个将不会改变 {{msg}}</span>
+
+      <!-- 2️⃣  原始HTML： v-html可以输出真正的HTML，直接作为HTML--会忽略 peoperty 值中的数据绑定，不能使用v-html来复合局部模版， 组件更适合作为可重用和可组合的基本单位.
+               动态渲染HTML很容易导致XSS攻击。只对可信内容使用HTML插值
+        -->
+      <p>Using mustaches: {{rawHtml}}</p>
+      <p>Using v-html directive: <span v-html="rawHtml"></span></p>
+
+      <!-- 3️⃣ Attribute（属性）: v-bind指令可以作用在HTML attribute上，对于布尔attribute，v-bind绑定的值为null， undefined或者 false， 则布尔类型attribute不会出现在HTMl标签上 -->
+      <div v-bind:id="dynamicId"></div>
+      <button v-bind:disabled="isButtonDisabled">Button</button>
+
+      <!-- 4️⃣ 使用JavaScript表达式 除了绑定简单的property 键值， 还支持JavaScript表达式 -->
+      <div>
+        {{number + 1}}{{ok?"Yes ":"No"}}{{message.split('').reverse().join('')}}
+      </div>
+      <div v-bind:id="'list-' + id"></div>
+    </div>
+
+    <script>
+      let vm = new Vue({
+        el: "#app",
+        data: {
+          msg: "hello Vue2.x",
+          rawHtml: "<span style='color: red'>This should be red.</span>",
+          dynamicId: 1,
+          isButtonDisabled: false,
+          number: 1,
+          ok: true,
+          message: "welcome",
+          id: 22,
+        },
+      });
+    </script>
+  </body>
 </html>
